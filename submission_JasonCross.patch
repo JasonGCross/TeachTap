@@ -1,0 +1,1634 @@
+diff --git a/.gitignore b/.gitignore
+index 05647d5..07f0473 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -33,3 +33,6 @@ yarn-error.*
+ 
+ # typescript
+ *.tsbuildinfo
++
++# JetBrains family of IDE's
++.idea/
+diff --git a/App.tsx b/App.tsx
+index f8b946d..2dac550 100644
+--- a/App.tsx
++++ b/App.tsx
+@@ -1,10 +1,12 @@
+ import { StatusBar } from 'expo-status-bar';
+-import { StyleSheet, Text, View } from 'react-native';
++import { View, StyleSheet } from 'react-native';
++
++import TabBarContent from './src/templates/TabBarContent';
+ 
+ export default function App() {
+     return (
+         <View style={styles.container}>
+-            <Text>Open up App.tsx to start working on your app!</Text>
++            <TabBarContent />
+             <StatusBar style="auto" />
+         </View>
+     );
+diff --git a/assets/activity.svg b/assets/activity.svg
+index a04d4a6..a757b1d 100644
+--- a/assets/activity.svg
++++ b/assets/activity.svg
+@@ -1,3 +1,3 @@
+ <svg width="19" height="21" viewBox="0 0 19 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+-    <path d="M9.49121 20.7334C8.24902 20.7334 7.08008 20.4961 5.98438 20.0215C4.88867 19.5527 3.92188 18.8994 3.08398 18.0615C2.25195 17.2236 1.59863 16.2568 1.12402 15.1611C0.649414 14.0654 0.412109 12.8965 0.412109 11.6543C0.412109 10.4121 0.649414 9.24316 1.12402 8.14746C1.59863 7.05176 2.25195 6.08789 3.08398 5.25586C3.92188 4.41797 4.88574 3.76172 5.97559 3.28711C7.07129 2.8125 8.24023 2.5752 9.48242 2.5752C10.7305 2.5752 11.9023 2.8125 12.998 3.28711C14.0938 3.76172 15.0605 4.41797 15.8984 5.25586C16.7363 6.08789 17.3926 7.05176 17.8672 8.14746C18.3418 9.24316 18.5791 10.4121 18.5791 11.6543C18.5791 12.8965 18.3418 14.0654 17.8672 15.1611C17.3926 16.2568 16.7363 17.2236 15.8984 18.0615C15.0605 18.8994 14.0938 19.5527 12.998 20.0215C11.9023 20.4961 10.7334 20.7334 9.49121 20.7334ZM9.49121 13.1748C9.91309 13.1748 10.2705 13.0283 10.5635 12.7354C10.8564 12.4424 11.0029 12.085 11.0029 11.6631C11.0029 11.376 10.9297 11.1182 10.7832 10.8896C10.6367 10.6553 10.4346 10.4707 10.1768 10.3359V6.09082C10.1768 5.90332 10.1094 5.74512 9.97461 5.61621C9.8457 5.48145 9.68164 5.41406 9.48242 5.41406C9.29492 5.41406 9.13379 5.48145 8.99902 5.61621C8.86426 5.74512 8.79688 5.90332 8.79688 6.09082V10.3271C8.55078 10.4736 8.35449 10.6641 8.20801 10.8984C8.06152 11.127 7.98828 11.3818 7.98828 11.6631C7.98828 12.0791 8.13184 12.4365 8.41895 12.7354C8.71191 13.0283 9.06934 13.1748 9.49121 13.1748ZM8.47168 3.01465V1.74023C8.47168 1.45898 8.57129 1.21875 8.77051 1.01953C8.96973 0.814453 9.20996 0.711914 9.49121 0.711914C9.77246 0.711914 10.0098 0.814453 10.2031 1.01953C10.4023 1.21875 10.502 1.45898 10.502 1.74023V3.01465H8.47168ZM15.1162 5.04492L16.0479 4.13965C16.2646 3.92871 16.5254 3.82324 16.8301 3.82324C17.1055 3.82324 17.3369 3.91699 17.5244 4.10449C17.7119 4.29199 17.8057 4.52051 17.8057 4.79004C17.8057 5.07129 17.6914 5.32617 17.4629 5.55469L16.4873 6.53027L15.1162 5.04492Z" fill="white" fill-opacity="0.4"/>
++    <path d="M9.49121 20.7334C8.24902 20.7334 7.08008 20.4961 5.98438 20.0215C4.88867 19.5527 3.92188 18.8994 3.08398 18.0615C2.25195 17.2236 1.59863 16.2568 1.12402 15.1611C0.649414 14.0654 0.412109 12.8965 0.412109 11.6543C0.412109 10.4121 0.649414 9.24316 1.12402 8.14746C1.59863 7.05176 2.25195 6.08789 3.08398 5.25586C3.92188 4.41797 4.88574 3.76172 5.97559 3.28711C7.07129 2.8125 8.24023 2.5752 9.48242 2.5752C10.7305 2.5752 11.9023 2.8125 12.998 3.28711C14.0938 3.76172 15.0605 4.41797 15.8984 5.25586C16.7363 6.08789 17.3926 7.05176 17.8672 8.14746C18.3418 9.24316 18.5791 10.4121 18.5791 11.6543C18.5791 12.8965 18.3418 14.0654 17.8672 15.1611C17.3926 16.2568 16.7363 17.2236 15.8984 18.0615C15.0605 18.8994 14.0938 19.5527 12.998 20.0215C11.9023 20.4961 10.7334 20.7334 9.49121 20.7334ZM9.49121 13.1748C9.91309 13.1748 10.2705 13.0283 10.5635 12.7354C10.8564 12.4424 11.0029 12.085 11.0029 11.6631C11.0029 11.376 10.9297 11.1182 10.7832 10.8896C10.6367 10.6553 10.4346 10.4707 10.1768 10.3359V6.09082C10.1768 5.90332 10.1094 5.74512 9.97461 5.61621C9.8457 5.48145 9.68164 5.41406 9.48242 5.41406C9.29492 5.41406 9.13379 5.48145 8.99902 5.61621C8.86426 5.74512 8.79688 5.90332 8.79688 6.09082V10.3271C8.55078 10.4736 8.35449 10.6641 8.20801 10.8984C8.06152 11.127 7.98828 11.3818 7.98828 11.6631C7.98828 12.0791 8.13184 12.4365 8.41895 12.7354C8.71191 13.0283 9.06934 13.1748 9.49121 13.1748ZM8.47168 3.01465V1.74023C8.47168 1.45898 8.57129 1.21875 8.77051 1.01953C8.96973 0.814453 9.20996 0.711914 9.49121 0.711914C9.77246 0.711914 10.0098 0.814453 10.2031 1.01953C10.4023 1.21875 10.502 1.45898 10.502 1.74023V3.01465H8.47168ZM15.1162 5.04492L16.0479 4.13965C16.2646 3.92871 16.5254 3.82324 16.8301 3.82324C17.1055 3.82324 17.3369 3.91699 17.5244 4.10449C17.7119 4.29199 17.8057 4.52051 17.8057 4.79004C17.8057 5.07129 17.6914 5.32617 17.4629 5.55469L16.4873 6.53027L15.1162 5.04492Z" fill="white" />
+ </svg>
+diff --git a/assets/bookmark.svg b/assets/bookmark.svg
+index c937298..e8ac406 100644
+--- a/assets/bookmark.svg
++++ b/assets/bookmark.svg
+@@ -1,3 +1,3 @@
+ <svg xmlns="http://www.w3.org/2000/svg" width="31" height="30" viewBox="0 0 31 30" fill="none">
+-  <path d="M4.5 4.98512C4.5 3.88877 5.39543 3 6.5 3H24.5C25.6046 3 26.5 3.88877 26.5 4.98512V26.0058C26.5 26.7891 25.6289 27.2637 24.9631 26.8432L16.0369 21.2051C15.7093 20.9982 15.2907 20.9982 14.9631 21.2051L6.03688 26.8432C5.37115 27.2637 4.5 26.7891 4.5 26.0058V4.98512Z" fill="white"/>
+-</svg>
+\ No newline at end of file
++  <path d="M4.5 4.98512C4.5 3.88877 5.39543 3 6.5 3H24.5C25.6046 3 26.5 3.88877 26.5 4.98512V26.0058C26.5 26.7891 25.6289 27.2637 24.9631 26.8432L16.0369 21.2051C15.7093 20.9982 15.2907 20.9982 14.9631 21.2051L6.03688 26.8432C5.37115 27.2637 4.5 26.7891 4.5 26.0058V4.98512Z" fill="white" />
++</svg>
+diff --git a/assets/home.svg b/assets/home.svg
+index 64680ee..b2e14e7 100644
+--- a/assets/home.svg
++++ b/assets/home.svg
+@@ -1,3 +1,3 @@
+ <svg xmlns="http://www.w3.org/2000/svg" width="22" height="19" viewBox="0 0 22 19" fill="none">
+   <path d="M11.5556 0.210955C11.2359 -0.0703185 10.7641 -0.0703183 10.4444 0.210955L0.799845 8.69577C0.198041 9.22521 0.562831 10.2373 1.35545 10.2373H2.74713L3.93224 17.5356C4.06946 18.3806 4.78181 19 5.6165 19H10.1463V12.428C10.1463 12.186 10.3374 11.9899 10.5731 11.9899H11.4269C11.6626 11.9899 11.8537 12.186 11.8537 12.428V19H16.3835C17.2182 19 17.9305 18.3806 18.0678 17.5356L19.2529 10.2373H20.6445C21.4372 10.2373 21.802 9.22521 21.2002 8.69577L11.5556 0.210955Z" fill="white"/>
+-</svg>
+\ No newline at end of file
++</svg>
+diff --git a/declaration.d.ts b/declaration.d.ts
+new file mode 100644
+index 0000000..dcae957
+--- /dev/null
++++ b/declaration.d.ts
+@@ -0,0 +1,6 @@
++declare module '*.svg' {
++    import React from 'react';
++    import { SvgProps } from 'react-native-svg';
++    const content: React.FC<SvgProps>;
++    export default content;
++}
+diff --git a/metro.config.js b/metro.config.js
+new file mode 100644
+index 0000000..61e49f0
+--- /dev/null
++++ b/metro.config.js
+@@ -0,0 +1,16 @@
++const { getDefaultConfig } = require('metro-config');
++
++module.exports = (async () => {
++    const {
++        resolver: { sourceExts, assetExts },
++    } = await getDefaultConfig();
++    return {
++        transformer: {
++            babelTransformerPath: require.resolve('react-native-svg-transformer'),
++        },
++        resolver: {
++            assetExts: assetExts.filter((ext) => ext !== 'svg'),
++            sourceExts: [...sourceExts, 'svg'],
++        },
++    };
++})();
+diff --git a/package.json b/package.json
+index 7e7b288..6ebe44a 100644
+--- a/package.json
++++ b/package.json
+@@ -11,10 +11,10 @@
+         "lint": "eslint ."
+     },
+     "dependencies": {
+-        "expo": "49.0.21",
++        "expo": "^49.0.23",
+         "expo-status-bar": "1.6.0",
+         "react": "18.2.0",
+-        "react-native": "0.72.6"
++        "react-native": "^0.71.16"
+     },
+     "devDependencies": {
+         "@babel/core": "7.23.5",
+@@ -22,6 +22,7 @@
+         "eslint": "8.55.0",
+         "eslint-config-universe": "12.0.0",
+         "prettier": "3.1.0",
++        "react-native-svg-transformer": "^1.3.0",
+         "typescript": "5.1.3"
+     },
+     "private": true
+diff --git a/src/components/atoms/AuthorHashTag.tsx b/src/components/atoms/AuthorHashTag.tsx
+new file mode 100644
+index 0000000..4ae57ac
+--- /dev/null
++++ b/src/components/atoms/AuthorHashTag.tsx
+@@ -0,0 +1,18 @@
++import React, { FC } from 'react';
++import { StyleSheet, Text } from 'react-native';
++
++type AuthorHashTagProps = {
++    text: string;
++};
++const AuthorHashTag: FC<AuthorHashTagProps> = ({ text }) => {
++    return <Text style={styles.text}>{text}</Text>;
++};
++
++const styles = StyleSheet.create({
++    text: {
++        fontSize: 13,
++        fontWeight: '700',
++        color: 'white',
++    },
++});
++export default AuthorHashTag;
+diff --git a/src/components/atoms/AuthorName.tsx b/src/components/atoms/AuthorName.tsx
+new file mode 100644
+index 0000000..df8b3d3
+--- /dev/null
++++ b/src/components/atoms/AuthorName.tsx
+@@ -0,0 +1,15 @@
++import React, { FC } from 'react';
++import { StyleSheet, Text } from 'react-native';
++
++const AuthorName: FC = () => {
++    return <Text style={styles.text}>AP US History</Text>;
++};
++
++const styles = StyleSheet.create({
++    text: {
++        color: 'white',
++        fontSize: 15,
++        fontWeight: '600',
++    },
++});
++export default AuthorName;
+diff --git a/src/components/atoms/Avatar.tsx b/src/components/atoms/Avatar.tsx
+new file mode 100644
+index 0000000..a78dce9
+--- /dev/null
++++ b/src/components/atoms/Avatar.tsx
+@@ -0,0 +1,50 @@
++import React, { FC } from 'react';
++import { View, StyleSheet, Image, Text, ViewStyle, StyleProp } from 'react-native';
++
++type AvatarProps = {
++    avatarUrl: string;
++    style: StyleProp<ViewStyle>;
++};
++const Avatar: FC<AvatarProps> = ({ avatarUrl, style }) => {
++    return (
++        <View style={[style, styles.container]}>
++            <Image source={{ uri: avatarUrl }} style={styles.avatarImage} />
++            <View style={styles.addBackground}>
++                <Text style={styles.addIcon}>+</Text>
++            </View>
++        </View>
++    );
++};
++
++const styles = StyleSheet.create({
++    container: {
++        flexDirection: 'column',
++        width: 45,
++        height: 52,
++    },
++    avatarImage: {
++        width: 45,
++        height: 45,
++        borderWidth: 1,
++        borderColor: 'white',
++        borderRadius: 22.5,
++    },
++    addBackground: {
++        backgroundColor: 'rgba(40, 177, 143, 1)',
++        width: 22,
++        height: 22,
++        borderRadius: 11,
++        position: 'absolute',
++        bottom: 0,
++        left: 11.5,
++        alignItems: 'center',
++        verticalAlign: 'center',
++        justifyContent: 'space-around',
++    },
++    addIcon: {
++        fontSize: 12,
++        fontWeight: '700',
++        color: 'white',
++    },
++});
++export default Avatar;
+diff --git a/src/components/atoms/ContentDescription.tsx b/src/components/atoms/ContentDescription.tsx
+new file mode 100644
+index 0000000..e781720
+--- /dev/null
++++ b/src/components/atoms/ContentDescription.tsx
+@@ -0,0 +1,18 @@
++import React, { FC } from 'react';
++import { StyleSheet, Text } from 'react-native';
++
++type ContentDescriptionProps = {
++    text: string;
++};
++const ContentDescription: FC<ContentDescriptionProps> = ({ text }) => {
++    return <Text style={styles.text}>{text}</Text>;
++};
++
++const styles = StyleSheet.create({
++    text: {
++        color: 'white',
++        fontSize: 13,
++        fontWeight: '400',
++    },
++});
++export default ContentDescription;
+diff --git a/src/components/atoms/Icon.tsx b/src/components/atoms/Icon.tsx
+new file mode 100644
+index 0000000..1779d8e
+--- /dev/null
++++ b/src/components/atoms/Icon.tsx
+@@ -0,0 +1,15 @@
++import React, { FC } from 'react';
++import { StyleSheet, View } from 'react-native';
++
++import { IconProps } from '../../models/IconProps';
++const Icon: FC<IconProps> = ({ containerHeight, containerWidth, icon }) => {
++    const containerStyle = StyleSheet.create({
++        container: {
++            height: containerHeight,
++            width: containerWidth,
++        },
++    });
++    return <View style={containerStyle.container}>{icon}</View>;
++};
++
++export default Icon;
+diff --git a/src/components/atoms/Question.tsx b/src/components/atoms/Question.tsx
+new file mode 100644
+index 0000000..02e26a4
+--- /dev/null
++++ b/src/components/atoms/Question.tsx
+@@ -0,0 +1,31 @@
++import React, { FC } from 'react';
++import { View, Text, StyleSheet } from 'react-native';
++
++import { QuestionProps } from '../../models/QuestionProp';
++const Question: FC<QuestionProps> = ({ style, text }) => {
++    return (
++        <View style={[style, styles.container]}>
++            <Text style={styles.text}>{text}</Text>
++        </View>
++    );
++};
++
++const styles = StyleSheet.create({
++    container: {
++        backgroundColor: 'rgba(0, 0, 0, 0.6)',
++        justifyContent: 'space-evenly',
++        borderRadius: 8,
++        paddingTop: 6,
++        paddingRight: 6,
++        paddingBottom: 6,
++        paddingLeft: 6,
++        alignSelf: 'flex-start',
++    },
++    text: {
++        lineHeight: 32,
++        fontSize: 22,
++        fontWeight: '500',
++        color: 'white',
++    },
++});
++export default Question;
+diff --git a/src/components/atoms/SearchButton.tsx b/src/components/atoms/SearchButton.tsx
+new file mode 100644
+index 0000000..b381e9e
+--- /dev/null
++++ b/src/components/atoms/SearchButton.tsx
+@@ -0,0 +1,31 @@
++import React, { FC } from 'react';
++import { GestureResponderEvent, Pressable, StyleSheet, View } from 'react-native';
++
++import SearchIcon from '../../../assets/search.svg';
++
++type SearchButtonProps = {
++    onPress: Function;
++};
++
++const SearchButton: FC<SearchButtonProps> = ({ onPress }) => {
++    function handleOnPress(e: GestureResponderEvent) {
++        onPress(e);
++    }
++    return (
++        <Pressable onPress={handleOnPress}>
++            <View style={styles.iconContainer}>
++                <SearchIcon width={18} height={19} />
++            </View>
++        </Pressable>
++    );
++};
++
++const styles = StyleSheet.create({
++    iconContainer: {
++        width: 30,
++        height: 30,
++        alignItems: 'center',
++        justifyContent: 'center',
++    },
++});
++export default SearchButton;
+diff --git a/src/components/atoms/TextStroke.tsx b/src/components/atoms/TextStroke.tsx
+new file mode 100644
+index 0000000..98cde69
+--- /dev/null
++++ b/src/components/atoms/TextStroke.tsx
+@@ -0,0 +1,70 @@
++import * as React from 'react';
++import { Children, cloneElement, isValidElement } from 'react';
++import { StyleSheet, View } from 'react-native';
++
++type Props = {
++    children: any;
++    color: string;
++    stroke: number;
++};
++const styles = StyleSheet.create({
++    outline: {
++        position: 'absolute',
++    },
++});
++
++/**
++ * see: https://stackoverflow.com/questions/38755258/react-native-font-outline-textshadow
++ */
++export default class TextStroke extends React.Component<Props> {
++    createClones = (w: number, h: number, color?: string) => {
++        const { children } = this.props;
++        return Children.map(children, (child) => {
++            if (isValidElement(child)) {
++                const currentProps = child.props as any;
++                const currentStyle = currentProps ? currentProps.style || {} : {};
++
++                const newProps = {
++                    ...currentProps,
++                    style: {
++                        ...currentStyle,
++                        textShadowOffset: {
++                            width: w,
++                            height: h,
++                        },
++                        textShadowColor: color,
++                        textShadowRadius: 1,
++                    },
++                };
++                return cloneElement(child, newProps);
++            }
++            return child;
++        });
++    };
++
++    render() {
++        const { color, stroke } = this.props;
++        const strokeW = stroke;
++        const top = this.createClones(0, -strokeW * 1.2, color);
++        const topLeft = this.createClones(-strokeW, -strokeW, color);
++        const topRight = this.createClones(strokeW, -strokeW, color);
++        const right = this.createClones(strokeW, 0, color);
++        const bottom = this.createClones(0, strokeW, color);
++        const bottomLeft = this.createClones(-strokeW, strokeW, color);
++        const bottomRight = this.createClones(strokeW, strokeW, color);
++        const left = this.createClones(-strokeW * 1.2, 0, color);
++
++        return (
++            <View>
++                <View style={styles.outline}>{left}</View>
++                <View style={styles.outline}>{right}</View>
++                <View style={styles.outline}>{bottom}</View>
++                <View style={styles.outline}>{top}</View>
++                <View style={styles.outline}>{topLeft}</View>
++                <View style={styles.outline}>{topRight}</View>
++                <View style={styles.outline}>{bottomLeft}</View>
++                {bottomRight}
++            </View>
++        );
++    }
++}
+diff --git a/src/components/molecules/ActionBarItem.tsx b/src/components/molecules/ActionBarItem.tsx
+new file mode 100644
+index 0000000..d79e1e5
+--- /dev/null
++++ b/src/components/molecules/ActionBarItem.tsx
+@@ -0,0 +1,32 @@
++import React, { FC, useState } from 'react';
++import { StyleSheet, View, Text } from 'react-native';
++
++import { ActionBarItemProps } from '../../models/ActionBarItemProps';
++import Icon from '../atoms/Icon';
++
++const ActionBarItem: FC<ActionBarItemProps> = ({ icon, initialCount }) => {
++    const [count] = useState(initialCount);
++    return (
++        <View style={styles.actionBarItem}>
++            <Icon containerHeight={30} containerWidth={30} icon={icon} />
++            <Text style={styles.actionBarItemCount}>{count}</Text>
++        </View>
++    );
++};
++
++const styles = StyleSheet.create({
++    actionBarItem: {
++        flex: 1,
++        flexDirection: 'column',
++        width: 45,
++        alignItems: 'center',
++        verticalAlign: 'center',
++        paddingTop: 6,
++    },
++    actionBarItemCount: {
++        fontSize: 11,
++        color: 'white',
++    },
++});
++
++export default ActionBarItem;
+diff --git a/src/components/molecules/Answer.tsx b/src/components/molecules/Answer.tsx
+new file mode 100644
+index 0000000..9c648c6
+--- /dev/null
++++ b/src/components/molecules/Answer.tsx
+@@ -0,0 +1,121 @@
++import React, { FC, useContext } from 'react';
++import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
++
++import { QuestionContext, QuestionDispatchContext } from '../../hooks/QuestionContext';
++import { AnswerProps } from '../../models/AnswerProps';
++import { MCQOptionAnsweredState } from '../../models/QuestionModels';
++import { TestStateEnum } from '../../models/TestState';
++import { TestTaking } from '../../models/TestTaking';
++import TextStroke from '../atoms/TextStroke';
++
++const Answer: FC<AnswerProps> = ({ optionModel, style }) => {
++    const test = useContext(QuestionContext);
++    const dispatch = useContext(QuestionDispatchContext);
++    function handleOptionSelected(letter: string) {
++        dispatch({
++            type: 'resetAnswer',
++            answer: letter,
++            oldTest: test,
++        });
++        fetchAnswersFromServer(test, letter).then((testWithAnswers) => {
++            dispatch({
++                type: 'addAnswersFromAPI',
++                answer: letter,
++                oldTest: testWithAnswers,
++            });
++        });
++    }
++    const answerState =
++        optionModel.optionAnswerState === undefined
++            ? MCQOptionAnsweredState.NothingChosen
++            : optionModel.optionAnswerState!;
++    let bg = { backgroundColor: 'rgba(255, 255, 255, 0.5)' };
++    if (
++        answerState === MCQOptionAnsweredState.ChosenCorrectly ||
++        answerState === MCQOptionAnsweredState.MissedChoosingOptionWhichWasCorrect
++    ) {
++        bg = { backgroundColor: 'rgba(40, 147, 143, 0.7)' };
++    } else if (answerState === MCQOptionAnsweredState.ChosenIncorrectly) {
++        bg = { backgroundColor: 'rgba(220, 95, 95, 0.7)' };
++    }
++    return (
++        <TouchableOpacity onPress={() => handleOptionSelected(optionModel.id)} style={[style, styles.container, bg]}>
++            <TextStroke color="rgba(0, 0, 0, 0.45)" stroke={1}>
++                <Text style={styles.text}>{optionModel.answer}</Text>
++            </TextStroke>
++            <View style={styles.iconContainer}>
++                {answerState === MCQOptionAnsweredState.ChosenCorrectly && (
++                    <Image source={require('../../../assets/correct.gif')} style={[styles.icon, styles.correctIcon]} />
++                )}
++                {answerState === MCQOptionAnsweredState.ChosenIncorrectly && (
++                    <Image source={require('../../../assets/wrong.gif')} style={[styles.icon, styles.wrongIcon]} />
++                )}
++            </View>
++        </TouchableOpacity>
++    );
++};
++
++const styles = StyleSheet.create({
++    container: {
++        backgroundColor: 'rgba(255, 255, 255, 0.5)',
++        borderRadius: 8,
++        marginTop: 10,
++        flexDirection: 'row',
++        justifyContent: 'space-between',
++        alignItems: 'center',
++        verticalAlign: 'center',
++    },
++    text: {
++        paddingTop: 10,
++        paddingBottom: 10,
++        paddingLeft: 10,
++        marginRight: 56,
++        fontSize: 17,
++        fontWeight: '500',
++        color: 'white',
++    },
++    iconContainer: {
++        width: 1,
++        height: 56,
++        position: 'relative',
++    },
++    icon: {
++        width: 56,
++        height: 56,
++        position: 'absolute',
++        right: 0,
++    },
++    correctIcon: {
++        top: -10,
++        transform: [{ rotate: '0deg' }],
++    },
++    wrongIcon: {
++        top: 10,
++        transform: [{ rotate: '-180deg' }],
++    },
++});
++
++function fetchAnswersFromServer(test: TestTaking, chosenLetter: string) {
++    if (test.question === undefined) {
++        return new Promise<TestTaking>((resolve, reject) => resolve(test));
++    }
++    const questionId = test.question.id;
++    return fetch(`https://cross-platform.rp.devfactory.com/reveal?id=${questionId}`)
++        .then((response) => {
++            return response.json();
++        })
++        .then((json) => {
++            if (typeof json === 'object' && typeof json.correct_options === 'object') {
++                return new TestTaking(
++                    test.question,
++                    json,
++                    chosenLetter,
++                    TestStateEnum.AnswerChosenByStudentAndKeyReceivedFromServer,
++                );
++            } else {
++                return test;
++            }
++        });
++}
++
++export default Answer;
+diff --git a/src/components/molecules/MultipleChoiceAnswers.tsx b/src/components/molecules/MultipleChoiceAnswers.tsx
+new file mode 100644
+index 0000000..7c03060
+--- /dev/null
++++ b/src/components/molecules/MultipleChoiceAnswers.tsx
+@@ -0,0 +1,28 @@
++import React, { FC, useContext } from 'react';
++import { StyleProp, StyleSheet, View, ViewStyle, Text } from 'react-native';
++
++import Answer from './Answer';
++import { QuestionContext } from '../../hooks/QuestionContext';
++
++type MultipleChoiceAnswersProps = {
++    style: StyleProp<ViewStyle>;
++};
++
++const MultipleChoiceAnswers: FC<MultipleChoiceAnswersProps> = ({ style }) => {
++    const test = useContext(QuestionContext);
++    let choices: React.JSX.Element[];
++    if (test.question !== undefined) {
++        choices = test.question.options.map((option) => {
++            return <Answer key={option.id} optionModel={option} style={{}} />;
++        });
++    } else {
++        choices = [<Text key="loading">loading...</Text>];
++    }
++    return <View style={[style, styles.container]}>{choices}</View>;
++};
++
++const styles = StyleSheet.create({
++    container: {},
++});
++
++export default MultipleChoiceAnswers;
+diff --git a/src/components/molecules/NavigationTitle.tsx b/src/components/molecules/NavigationTitle.tsx
+new file mode 100644
+index 0000000..e147361
+--- /dev/null
++++ b/src/components/molecules/NavigationTitle.tsx
+@@ -0,0 +1,44 @@
++import React, { FC } from 'react';
++import { StyleSheet, View, Text } from 'react-native';
++
++type NavigationTitleProps = {
++    title: string;
++};
++const NavigationTitle: FC<NavigationTitleProps> = ({ title }) => {
++    return (
++        <View style={styles.outerContainer}>
++            <View style={styles.container}>
++                <Text style={styles.titleText}>{title}</Text>
++                <View style={styles.lineContainer}>
++                    <View style={styles.bottomLine} />
++                </View>
++            </View>
++        </View>
++    );
++};
++
++const styles = StyleSheet.create({
++    outerContainer: {},
++    container: {
++        flexDirection: 'column',
++        alignItems: 'center',
++    },
++    titleText: {
++        fontSize: 16,
++        fontWeight: '600',
++        color: 'white',
++    },
++    lineContainer: {
++        width: '100%',
++        paddingLeft: 10,
++        paddingRight: 10,
++    },
++    bottomLine: {
++        backgroundColor: 'white',
++        width: '100%',
++        height: 4,
++        marginTop: 5,
++    },
++});
++
++export default NavigationTitle;
+diff --git a/src/components/molecules/Playlist.tsx b/src/components/molecules/Playlist.tsx
+new file mode 100644
+index 0000000..82b3d72
+--- /dev/null
++++ b/src/components/molecules/Playlist.tsx
+@@ -0,0 +1,46 @@
++import React, { FC } from 'react';
++import { StyleSheet, View, Text, StyleProp, ViewStyle } from 'react-native';
++
++import PlaylistIcon from '../../../assets/playlist.svg';
++
++type PlaylistProps = {
++    playlistText: string;
++    style: StyleProp<ViewStyle>;
++};
++const Playlist: FC<PlaylistProps> = ({ playlistText, style }) => {
++    const chevronCharacter = '>';
++    return (
++        <View style={[style, styles.container]}>
++            <PlaylistIcon width={18} height={15} />
++            <Text style={styles.text}>Playlist • {playlistText}</Text>
++            <Text style={styles.chevron}>{chevronCharacter}</Text>
++        </View>
++    );
++};
++
++const styles = StyleSheet.create({
++    container: {
++        width: '100%',
++        flexDirection: 'row',
++        backgroundColor: 'rgba(22, 22, 22, 1)',
++        paddingTop: 10,
++        paddingBottom: 10,
++        paddingLeft: 16,
++    },
++    text: {
++        color: 'white',
++        fontSize: 13,
++        fontWeight: '600',
++        paddingLeft: 4,
++    },
++    chevron: {
++        flex: 1,
++        color: 'white',
++        fontSize: 13,
++        fontWeight: '700',
++        textAlign: 'right',
++        paddingRight: 16,
++    },
++});
++
++export default Playlist;
+diff --git a/src/components/molecules/QuestionMetadata.tsx b/src/components/molecules/QuestionMetadata.tsx
+new file mode 100644
+index 0000000..4c8cc1e
+--- /dev/null
++++ b/src/components/molecules/QuestionMetadata.tsx
+@@ -0,0 +1,44 @@
++import React, { FC } from 'react';
++import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
++
++import AuthorHashTag from '../atoms/AuthorHashTag';
++import AuthorName from '../atoms/AuthorName';
++import ContentDescription from '../atoms/ContentDescription';
++
++type QuestionMetadataProps = {
++    style: StyleProp<ViewStyle>;
++    description: string;
++};
++
++const QuestionMetadata: FC<QuestionMetadataProps> = ({ style, description }) => {
++    let nonBoldDescription = description;
++    let boldDescription = '';
++    const regex = new RegExp('#[a-zA-Z0-9]+');
++    const suffix = description.match(regex);
++    if (regex.test(description) && suffix?.length === 1) {
++        nonBoldDescription = description.replace(regex, '');
++        boldDescription = suffix[0];
++    }
++    return (
++        <View style={[style, styles.container]}>
++            <AuthorName />
++            <View style={styles.secondRow}>
++                <ContentDescription text={nonBoldDescription} />
++                <AuthorHashTag text={boldDescription} />
++            </View>
++        </View>
++    );
++};
++
++const styles = StyleSheet.create({
++    container: {
++        flexDirection: 'column',
++        justifyContent: 'space-between',
++    },
++    secondRow: {
++        marginTop: 6,
++        flexDirection: 'row',
++    },
++});
++
++export default QuestionMetadata;
+diff --git a/src/components/molecules/TabBarItem.tsx b/src/components/molecules/TabBarItem.tsx
+new file mode 100644
+index 0000000..b853cbc
+--- /dev/null
++++ b/src/components/molecules/TabBarItem.tsx
+@@ -0,0 +1,30 @@
++import React, { FC } from 'react';
++import { StyleSheet, View, Text } from 'react-native';
++
++import { TabBarItemProps } from '../../models/TabBarItemProps';
++import Icon from '../atoms/Icon';
++
++const TabBarItem: FC<TabBarItemProps> = ({ selected, title, icon }) => {
++    const textOpacity = selected ? { opacity: 1 } : { opacity: 0.4 };
++    return (
++        <View style={styles.tabBarItem}>
++            <Icon containerWidth={21} containerHeight={21} icon={icon} />
++            <Text style={[textOpacity, styles.tabBarTitle]}>{title}</Text>
++        </View>
++    );
++};
++
++const styles = StyleSheet.create({
++    tabBarItem: {
++        flex: 1,
++        flexDirection: 'column',
++        width: 60,
++        alignItems: 'center',
++        paddingTop: 6,
++    },
++    tabBarTitle: {
++        fontSize: 11,
++        color: 'white',
++    },
++});
++export default TabBarItem;
+diff --git a/src/components/molecules/Timer.tsx b/src/components/molecules/Timer.tsx
+new file mode 100644
+index 0000000..9fdc945
+--- /dev/null
++++ b/src/components/molecules/Timer.tsx
+@@ -0,0 +1,52 @@
++import React, { FC } from 'react';
++import { View, Text, StyleSheet } from 'react-native';
++
++import ClockIcon from '../../../assets/activity.svg';
++
++type TimerProps = {
++    seconds: number;
++};
++const Timer: FC<TimerProps> = ({ seconds }) => {
++    function displayTime() {
++        if (seconds <= 0) {
++            return '0';
++        }
++        if (seconds < 60) {
++            return `${seconds}s`;
++        }
++        if (seconds < 60 * 60) {
++            const minutes = Math.floor(seconds / 60);
++            return `${minutes}m`;
++        }
++        if (seconds < 60 * 60 * 24) {
++            const hours = Math.floor(seconds / (60 * 60));
++            const minutes = Math.floor((seconds - (hours * 60 * 60)) / 60)
++            return `${hours}h${minutes}m`;
++        }
++        const days = Math.floor(seconds / (60 * 60 * 24));
++        return `${days}`;
++    }
++    return (
++        <View style={styles.container}>
++            <ClockIcon width={19} height={19} fillOpacity={0.6} />
++            <Text style={styles.counter}>{displayTime()}</Text>
++        </View>
++    );
++};
++
++const styles = StyleSheet.create({
++    container: {
++        flexDirection: 'row',
++        alignItems: 'center',
++    },
++    counter: {
++        paddingLeft: 4,
++        paddingTop: 1,
++        paddingBottom: 1,
++        height: 17,
++        color: 'white',
++        opacity: 0.6,
++    },
++});
++
++export default Timer;
+diff --git a/src/components/organisms/ActionBar.tsx b/src/components/organisms/ActionBar.tsx
+new file mode 100644
+index 0000000..63e1e2f
+--- /dev/null
++++ b/src/components/organisms/ActionBar.tsx
+@@ -0,0 +1,53 @@
++import React, { FC } from 'react';
++import { StyleSheet, View } from 'react-native';
++
++import BookmarkIcon from '../../../assets/bookmark.svg';
++import CommentIcon from '../../../assets/comment.svg';
++import LikeIcon from '../../../assets/heart.svg';
++import ShareIcon from '../../../assets/share.svg';
++import { ActionBarItemProps } from '../../models/ActionBarItemProps';
++import Avatar from '../atoms/Avatar';
++import ActionBarItem from '../molecules/ActionBarItem';
++
++const actionBarData: ActionBarItemProps[] = [
++    { id: 1, initialCount: 87, icon: <LikeIcon width={31} height={30} /> },
++    { id: 2, initialCount: 2, icon: <CommentIcon width={31} height={30} /> },
++    { id: 3, initialCount: 203, icon: <BookmarkIcon width={31} height={30} fillOpacity={1} /> },
++    { id: 4, initialCount: 17, icon: <ShareIcon width={31} height={30} /> },
++];
++
++const actions = actionBarData.map((item) => {
++    return <ActionBarItem key={item.id} id={item.id} icon={item.icon} initialCount={item.initialCount} />;
++});
++
++type ActionBarProps = {
++    avatarUrl: string;
++};
++
++const ActionBar: FC<ActionBarProps> = ({ avatarUrl }) => {
++    return (
++        <View style={styles.actionBar}>
++            <Avatar avatarUrl={avatarUrl} style={styles.avatar} />
++            {actions}
++        </View>
++    );
++};
++
++const styles = StyleSheet.create({
++    avatar: {
++        marginBottom: 15,
++    },
++    actionBar: {
++        flex: 1,
++        flexDirection: 'column',
++        justifyContent: 'space-evenly',
++        position: 'absolute',
++        right: 8,
++        bottom: 83 + 16 + 34,
++        color: 'white',
++        width: 45,
++        height: 297,
++    },
++});
++
++export default ActionBar;
+diff --git a/src/components/organisms/MCQ.tsx b/src/components/organisms/MCQ.tsx
+new file mode 100644
+index 0000000..f96e469
+--- /dev/null
++++ b/src/components/organisms/MCQ.tsx
+@@ -0,0 +1,66 @@
++import React, { FC, useReducer } from 'react';
++import { View, StyleSheet, ImageBackground } from 'react-native';
++
++import ActionBar from './ActionBar';
++import { QuestionContext, QuestionDispatchContext } from '../../hooks/QuestionContext';
++import testTakingReducer from '../../hooks/testTakingReducer';
++import { QuestionModel } from '../../models/QuestionModels';
++import { TestTaking } from '../../models/TestTaking';
++import Question from '../atoms/Question';
++import MultipleChoiceAnswers from '../molecules/MultipleChoiceAnswers';
++import Playlist from '../molecules/Playlist';
++import QuestionMetadata from '../molecules/QuestionMetadata';
++
++type MCQProps = {
++    model: QuestionModel;
++    cardHeight: number;
++};
++
++const MCQ: FC<MCQProps> = ({ model, cardHeight }) => {
++    const [test, dispatch] = useReducer(testTakingReducer, new TestTaking(model));
++    return (
++        <QuestionContext.Provider value={test}>
++            <QuestionDispatchContext.Provider value={dispatch}>
++                <ImageBackground source={{ uri: model.image }}>
++                    <View style={[{ height: cardHeight }, styles.container]}>
++                        <Question style={styles.question} text={model.question} />
++                        <MultipleChoiceAnswers style={styles.answers} />
++                        <QuestionMetadata style={styles.metadata} description={model.description} />
++                    </View>
++                    <ActionBar avatarUrl={model.user.avatar} />
++                    <Playlist style={styles.playlist} playlistText={model.playlist} />
++                </ImageBackground>
++            </QuestionDispatchContext.Provider>
++        </QuestionContext.Provider>
++    );
++};
++
++const styles = StyleSheet.create({
++    container: {
++        width: '100%',
++        paddingLeft: 16,
++        paddingRight: 45,
++        paddingTop: 44 + 20 + 80,
++        paddingBottom: 83 + 16 + 40 + 90,
++        flexDirection: 'column',
++        justifyContent: 'space-between',
++    },
++    question: {
++        marginRight: 50,
++    },
++    answers: {
++        marginRight: 33,
++    },
++    metadata: {
++        width: '100%',
++        paddingLeft: 16,
++        paddingRight: 45,
++        position: 'absolute',
++        bottom: 83 + 16 + 40,
++    },
++    playlist: {
++        position: 'absolute',
++        bottom: 83,
++    },
++});
++export default MCQ;
+diff --git a/src/components/organisms/NavigationBar.tsx b/src/components/organisms/NavigationBar.tsx
+new file mode 100644
+index 0000000..6d255b9
+--- /dev/null
++++ b/src/components/organisms/NavigationBar.tsx
+@@ -0,0 +1,36 @@
++import React, { useEffect, useState } from 'react';
++import { StyleSheet, View, GestureResponderEvent } from 'react-native';
++
++import SearchButton from '../atoms/SearchButton';
++import NavigationTitle from '../molecules/NavigationTitle';
++import Timer from '../molecules/Timer';
++export default function NavigationBar() {
++    const [seconds, setSeconds] = useState(0);
++    useEffect(() => {
++        const interval = setInterval(() => {
++            setSeconds((seconds) => seconds + 1);
++        }, 1000);
++        return () => clearInterval(interval);
++    }, []);
++    return (
++        <View style={styles.navBar}>
++            <Timer seconds={seconds} />
++            <NavigationTitle title="For You" />
++            <SearchButton onPress={(e: GestureResponderEvent) => {}} />
++        </View>
++    );
++}
++
++const styles = StyleSheet.create({
++    navBar: {
++        flexDirection: 'row',
++        justifyContent: 'space-between',
++        alignItems: 'center',
++        position: 'absolute',
++        top: 64,
++        width: '100%',
++        height: 31,
++        paddingLeft: 10,
++        paddingRight: 10,
++    },
++});
+diff --git a/src/components/organisms/TabBar.tsx b/src/components/organisms/TabBar.tsx
+new file mode 100644
+index 0000000..e4c046a
+--- /dev/null
++++ b/src/components/organisms/TabBar.tsx
+@@ -0,0 +1,38 @@
++import React from 'react';
++import { StyleSheet, View } from 'react-native';
++
++import ActivityIcon from '../../../assets/activity.svg';
++import BookmarkIcon from '../../../assets/bookmark.svg';
++import DiscoverIcon from '../../../assets/discover.svg';
++import HomeIcon from '../../../assets/home.svg';
++import ProfileIcon from '../../../assets/profile.svg';
++import { TabBarItemProps } from '../../models/TabBarItemProps';
++import TabBarItem from '../molecules/TabBarItem';
++
++const tabBarData: TabBarItemProps[] = [
++    { id: 0, selected: true, title: 'Home', icon: <HomeIcon width={19} height={19} /> },
++    { id: 1, selected: false, title: 'Discover', icon: <DiscoverIcon width={19} height={19} /> },
++    { id: 2, selected: false, title: 'Activity', icon: <ActivityIcon width={19} height={19} fillOpacity={0.4} /> },
++    { id: 3, selected: false, title: 'Bookmarks', icon: <BookmarkIcon width={19} height={19} fillOpacity={0.4} /> },
++    { id: 4, selected: false, title: 'Profile', icon: <ProfileIcon width={19} height={19} /> },
++];
++
++const tabs = tabBarData.map((item) => {
++    return <TabBarItem key={item.id} id={item.id} title={item.title} icon={item.icon} selected={item.selected} />;
++});
++export default function TabBar() {
++    return <View style={styles.tabBar}>{tabs}</View>;
++}
++
++const styles = StyleSheet.create({
++    tabBar: {
++        flexDirection: 'row',
++        justifyContent: 'space-evenly',
++        position: 'absolute',
++        bottom: 0,
++        backgroundColor: 'black',
++        color: 'white',
++        width: '100%',
++        height: 83,
++    },
++});
+diff --git a/src/components/pages/HomePage.tsx b/src/components/pages/HomePage.tsx
+new file mode 100644
+index 0000000..63fd58b
+--- /dev/null
++++ b/src/components/pages/HomePage.tsx
+@@ -0,0 +1,78 @@
++import React, { useReducer, useEffect, useState } from 'react';
++import { View, StyleSheet, FlatList, useWindowDimensions } from 'react-native';
++
++import questionsReducer from '../../hooks/questionsReducer';
++import { QuestionModel } from '../../models/QuestionModels';
++import MCQ from '../organisms/MCQ';
++import NavigationBar from '../organisms/NavigationBar';
++
++export default function HomePage() {
++    const [isFetching, setIsFetching] = useState(false);
++    const [questionData, dispatch] = useReducer(questionsReducer, initialQuestions);
++    const { height } = useWindowDimensions();
++    const questionHeight = height;
++
++    useEffect(() => {
++        fetchNextQuestion();
++    });
++    function fetchNextQuestion() {
++        if (!isFetching) {
++            setIsFetching(true);
++            setIsFetching(false);
++            fetch('https://cross-platform.rp.devfactory.com/for_you')
++                .then((response) => {
++                    return response.json();
++                })
++                .then((json) => {
++                    if (typeof json === 'object' && typeof json.playlist === 'string') {
++                        dispatch({
++                            type: 'new',
++                            question: json,
++                            message: undefined,
++                        });
++                    } else {
++                        dispatch({
++                            type: 'error',
++                            message: 'API error',
++                            question: undefined,
++                        });
++                    }
++                });
++        }
++    }
++
++    async function handleEndOfListReached() {
++        //dispatch({ question: undefined, type: 'fetch' });
++        fetchNextQuestion();
++    }
++    return (
++        <>
++            <View style={styles.background} />
++            <FlatList
++                style={{ height: questionHeight }}
++                data={questionData}
++                keyExtractor={(item) => `${item.id}`}
++                renderItem={({ item }) => <MCQ model={item} cardHeight={questionHeight} />}
++                centerContent
++                pagingEnabled
++                onEndReached={handleEndOfListReached}
++            />
++            <NavigationBar />
++        </>
++    );
++}
++
++const styles = StyleSheet.create({
++    background: {
++        backgroundColor: 'rgb(60,75,60)',
++        height: '100%',
++        left: 0,
++        margin: 0,
++        padding: 0,
++        position: 'absolute',
++        top: 0,
++        width: '100%',
++    },
++});
++
++const initialQuestions: QuestionModel[] = [];
+diff --git a/src/hooks/QuestionContext.ts b/src/hooks/QuestionContext.ts
+new file mode 100644
+index 0000000..9fa4962
+--- /dev/null
++++ b/src/hooks/QuestionContext.ts
+@@ -0,0 +1,6 @@
++import { createContext } from 'react';
++
++import { TestAction } from './testTakingReducer';
++import { TestTaking } from '../models/TestTaking';
++export const QuestionContext = createContext(new TestTaking());
++export const QuestionDispatchContext = createContext((action: TestAction) => {});
+diff --git a/src/hooks/questionsReducer.ts b/src/hooks/questionsReducer.ts
+new file mode 100644
+index 0000000..ada567f
+--- /dev/null
++++ b/src/hooks/questionsReducer.ts
+@@ -0,0 +1,24 @@
++import { QuestionModel } from '../models/QuestionModels';
++
++type Action = {
++    type: string;
++    question: QuestionModel | undefined;
++    message: string | undefined;
++};
++export default function questionsReducer(questions: QuestionModel[], action: Action) {
++    switch (action.type) {
++        case 'new': {
++            if (action.question) {
++                const tempData = [...questions];
++                const duplicate = questions.filter((q) => q.id === action.question?.id);
++                if (duplicate.length === 0) {
++                    const nextIndex = tempData.length;
++                    tempData[nextIndex] = action.question;
++                    return tempData;
++                }
++            }
++            break;
++        }
++    }
++    return questions;
++}
+diff --git a/src/hooks/testTakingReducer.ts b/src/hooks/testTakingReducer.ts
+new file mode 100644
+index 0000000..dc5e457
+--- /dev/null
++++ b/src/hooks/testTakingReducer.ts
+@@ -0,0 +1,103 @@
++import { MCQOptionAnsweredState, MultipleChoiceOptionModel } from '../models/QuestionModels';
++import { TestStateEnum } from '../models/TestState';
++import { TestTaking } from '../models/TestTaking';
++
++export type TestAction = {
++    type: string;
++    answer: string | undefined;
++    oldTest: TestTaking | undefined;
++};
++
++export default function testTakingReducer(test: TestTaking, action: TestAction) {
++    switch (action.type) {
++        case 'resetAnswer': {
++            if (action.oldTest === undefined) {
++                return test;
++            }
++            return reducerHelperResetPreviousAnswers(test);
++        }
++        case 'addAnswersFromAPI': {
++            if (action.oldTest === undefined) {
++                return test;
++            }
++            return reducerMarkTest(action.oldTest);
++        }
++    }
++    return test;
++}
++
++function reducerHelperResetPreviousAnswers(test: TestTaking) {
++    if (test.question === undefined) {
++        return test;
++    }
++    const tempOptions: MultipleChoiceOptionModel[] = [];
++    test.question.options.map((oldOption) => {
++        const tempOption = { ...oldOption };
++        tempOption.optionAnswerState = MCQOptionAnsweredState.NothingChosen;
++        tempOptions.push(tempOption);
++    });
++    const resetQuestion = { ...test.question };
++    resetQuestion.options = tempOptions;
++    return new TestTaking(resetQuestion);
++}
++
++function reducerMarkTest(test: TestTaking) {
++    if (
++        test.question === undefined ||
++        test.optionSelected === undefined ||
++        test.testState !== TestStateEnum.AnswerChosenByStudentAndKeyReceivedFromServer ||
++        test.answer === undefined ||
++        test.answer === null ||
++        !Array.isArray(test.answer.correct_options) ||
++        test.answer.correct_options[0] === undefined ||
++        test.answer.correct_options[0].id === undefined ||
++        !Array.isArray(test.question.options)
++    ) {
++        return test;
++    }
++    const answerActuallyChosen: string = test.optionSelected;
++    const correctOptionLetter = test.answer?.correct_options[0].id;
++    const options = test.question.options;
++
++    const tempOptions: MultipleChoiceOptionModel[] = [];
++    options.map((oldOption) => {
++        const keyForThisOption = oldOption.id;
++        const tempOption: MultipleChoiceOptionModel = {
++            id: oldOption.id,
++            answer: oldOption.answer,
++            optionAnswerState: MCQOptionAnsweredState.NothingChosen,
++        };
++        // important part of the logic below/
++        // find out if this options was chosen correctly or not
++        //
++        // The student chose the correct answer. Now figure out
++        // which of the options to mark as correct. The others may be
++        // left alone
++        if (answerActuallyChosen === correctOptionLetter) {
++            if (keyForThisOption === answerActuallyChosen) {
++                tempOption.optionAnswerState = MCQOptionAnsweredState.ChosenCorrectly;
++            } else {
++                tempOption.optionAnswerState = MCQOptionAnsweredState.NothingChosen;
++            }
++        } else {
++            // The student failed to choose the correct answer.
++            // now figure out which answer should have been chosen
++            // and don't forget to mark the one chosen as wrong.
++            if (keyForThisOption === correctOptionLetter) {
++                tempOption.optionAnswerState = MCQOptionAnsweredState.MissedChoosingOptionWhichWasCorrect;
++            } else {
++                if (keyForThisOption === answerActuallyChosen) {
++                    tempOption.optionAnswerState = MCQOptionAnsweredState.ChosenIncorrectly;
++                } else {
++                    tempOption.optionAnswerState = MCQOptionAnsweredState.NothingChosen;
++                }
++            }
++        }
++        tempOptions.push(tempOption);
++    });
++    const copiedTest = { ...test };
++    copiedTest.question = test.question;
++    copiedTest.question.options = tempOptions;
++    copiedTest.testState = TestStateEnum.Graded;
++    return copiedTest;
++}
+diff --git a/src/models/ActionBarItemProps.ts b/src/models/ActionBarItemProps.ts
+new file mode 100644
+index 0000000..1c6c452
+--- /dev/null
++++ b/src/models/ActionBarItemProps.ts
+@@ -0,0 +1,7 @@
++import React from 'react';
++
++export type ActionBarItemProps = {
++    id: number;
++    icon: React.ReactElement;
++    initialCount: number;
++};
+diff --git a/src/models/AnswerProps.ts b/src/models/AnswerProps.ts
+new file mode 100644
+index 0000000..e0a5706
+--- /dev/null
++++ b/src/models/AnswerProps.ts
+@@ -0,0 +1,8 @@
++import { StyleProp, ViewStyle } from 'react-native';
++
++import { MultipleChoiceOptionModel } from './QuestionModels';
++
++export type AnswerProps = {
++    optionModel: MultipleChoiceOptionModel;
++    style: StyleProp<ViewStyle>;
++};
+diff --git a/src/models/FakeData.ts b/src/models/FakeData.ts
+new file mode 100644
+index 0000000..3dacabb
+--- /dev/null
++++ b/src/models/FakeData.ts
+@@ -0,0 +1,92 @@
++import { QuestionModel } from './QuestionModels';
++
++export const fakeData: QuestionModel[] = [
++    {
++        type: 'mcq',
++        id: 7069,
++        playlist: 'Period 6: 1865-1898',
++        description: '5.4 The Compromise of 1850 #apush',
++        image: 'https://cross-platform-rwa.rp.devfactory.com/images/7069%20-%20Compromise%20of%201850.png',
++        question: 'What led to the Compromise of 1850?',
++        options: [
++            { id: 'A', answer: 'Sectional disagreements over slavery' },
++            { id: 'B', answer: 'Conflict over tariffs' },
++            { id: 'C', answer: "Arguments surrounding states' rights" },
++        ],
++        user: { name: 'AP US History', avatar: 'https://cross-platform-rwa.rp.devfactory.com/avatars/apush.png' },
++    },
++    {
++        type: 'mcq',
++        id: 3794,
++        playlist: 'Period 6: 1865-1898',
++        description: '5.5 Sectional Conflict: Regional Differences #apush',
++        image: 'https://cross-platform-rwa.rp.devfactory.com/images/3794%20-%20industrial%20vs%20agricultural%20economy.png',
++        question:
++            'Aside from slavery, what was the most significant difference betweent the North and South during the mid-1800s?',
++        options: [
++            { id: 'A', answer: 'An industrial vs. agricultural economy' },
++            { id: 'B', answer: 'Income inequality' },
++            { id: 'C', answer: 'Dependence on imports' },
++        ],
++        user: { name: 'AP US History', avatar: 'https://cross-platform-rwa.rp.devfactory.com/avatars/apush.png' },
++    },
++    {
++        type: 'mcq',
++        id: 7228,
++        playlist: 'Period 6: 1865-1898',
++        description: '5.5 Sectional Conflict: Regional Differences #apush',
++        image: 'https://cross-platform-rwa.rp.devfactory.com/images/7228%20-%20John%20Browns%20attack%20at%20Harpers%20Ferry.png',
++        question: "Why did John Brown's attack at Harper's Ferry shock the nation?",
++        options: [
++            {
++                id: 'A',
++                answer: "It created fears that white northerner's would initiate acts of violence to end slavery",
++            },
++            { id: 'B', answer: 'It was successful and resulted in hundreds of slaves being freed' },
++            { id: 'C', answer: 'The level of violence over the issue of slavery had not been seen before' },
++        ],
++        user: { name: 'AP US History', avatar: 'https://cross-platform-rwa.rp.devfactory.com/avatars/apush.png' },
++    },
++    {
++        type: 'mcq',
++        id: 3219,
++        playlist: 'Period 6: 1865-1898',
++        description: '5.5 Sectional Conflict: Regional Differences #apush',
++        image: 'https://cross-platform-rwa.rp.devfactory.com/images/3219%20-%20Protestants%20face%20nativists%20in%201800s.png',
++        question: "Which of the following groups was not a common target for nativists in the 1800's?",
++        options: [
++            { id: 'A', answer: 'Protestants' },
++            { id: 'B', answer: 'Catholics' },
++            { id: 'C', answer: 'Chinese' },
++        ],
++        user: { name: 'AP US History', avatar: 'https://cross-platform-rwa.rp.devfactory.com/avatars/apush.png' },
++    },
++    {
++        type: 'mcq',
++        id: 8282,
++        playlist: 'Period 6: 1865-1898',
++        description: '5.4 The Compromise of 1850 #apush',
++        image: 'https://cross-platform-rwa.rp.devfactory.com/images/8282%20-%20California%20Compromise%20of%201850.png',
++        question: 'As part of the Compromise of 1850, which state was admitted as a free state?',
++        options: [
++            { id: 'A', answer: 'California' },
++            { id: 'B', answer: 'Kansas' },
++            { id: 'C', answer: 'Oregon' },
++        ],
++        user: { name: 'AP US History', avatar: 'https://cross-platform-rwa.rp.devfactory.com/avatars/apush.png' },
++    },
++    {
++        type: 'mcq',
++        id: 2979,
++        playlist: 'Period 6: 1865-1898',
++        description: '5.5 Sectional Conflict: Regional Differences #apush',
++        question: "What were the two largest immigrant groups during the mid-1800's?",
++        image: 'https://cross-platform-rwa.rp.devfactory.com/images/2979%20-%20german%20and%20irish%20immigrant%20groups.png',
++        options: [
++            { id: 'A', answer: 'German & Irish' },
++            { id: 'B', answer: 'Italian & German' },
++            { id: 'C', answer: 'Chinese & Japanese' },
++        ],
++        user: { name: 'AP US History', avatar: 'https://cross-platform-rwa.rp.devfactory.com/avatars/apush.png' },
++    },
++];
+diff --git a/src/models/IconProps.ts b/src/models/IconProps.ts
+new file mode 100644
+index 0000000..8e3ed09
+--- /dev/null
++++ b/src/models/IconProps.ts
+@@ -0,0 +1,7 @@
++import React from 'react';
++
++export type IconProps = {
++    containerHeight: number;
++    icon: React.ReactElement;
++    containerWidth: number;
++};
+diff --git a/src/models/QuestionModels.ts b/src/models/QuestionModels.ts
+new file mode 100644
+index 0000000..03524d1
+--- /dev/null
++++ b/src/models/QuestionModels.ts
+@@ -0,0 +1,95 @@
++/**
++ * Used for an internal "state machine" to keep track of the learner's
++ * progress while attempting to correctly answer a question.
++ * This is not a property returned from the web server, but will be
++ * appended on to the JSON as the student attempts the test.
++ */
++export enum MCQOptionAnsweredState {
++    NothingChosen = 'NO_ANSWER_CHOSEN',
++    ChosenCorrectly = 'CHOSEN_CORRECTLY',
++    ChosenIncorrectly = 'INCORRECT_CHOICE_MADE',
++    MissedChoosingOptionWhichWasCorrect = 'MISSED_THIS_OPTION_WHICH_IS_CORRECT',
++}
++
++/**
++ * The answer to a multiple choice test question, as returned by the web server.
++ *
++ * <example>
++ *   {
++ *     "id": 8282,
++ *     "correct_options": [
++ *         {
++ *             "id": "A",
++ *             "answer": "California"
++ *         }
++ *     ]
++ * }
++ * </example>
++ */
++export type AnswerModel = {
++    id: number;
++    correct_options: CorrectOption[];
++};
++
++/**
++ * A sub-field of an AnswerModel. Contains the actual answer to the question.
++ * <example>
++ *   {
++ *       "id": "A",
++ *        "answer": "California"
++ *    }
++ * </example>
++ */
++export type CorrectOption = {
++    id: string;
++    answer: string;
++};
++
++/**
++ * The full JSON returned by the server which represents a test question
++ * (in this case, a multiple choice question). Note that the answer to the
++ * question is not in this model object but rather a separate model
++ * resulting from a separate API call.
++ */
++export type QuestionModel = {
++    type: string;
++    id: number;
++    playlist: string;
++    description: string;
++    image: string;
++    question: string;
++    options: MultipleChoiceOptionModel[];
++    user: UserModel;
++};
++
++/**
++ * A nested object within the test. Each option corresponds to a multiple
++ * choice. The student user is presented with a list of these options, with
++ * the idea of choosing one as the correct answer.
++ * <example>
++ *   {
++ *   "id": "B",
++ *   "answer": "Italian & German"
++ * }
++ * </example>
++ */
++export type MultipleChoiceOptionModel = {
++    id: string;
++    answer: string;
++    optionAnswerState: MCQOptionAnsweredState | undefined;
++};
++
++/**
++ * A nested object within the test. The user in this case is not the test
++ * taker but rather the author of the test.
++ * <example>
++ *   {
++ *       "name": "AP US History",
++ *       "avatar": "https://cross-platform-rwa.rp.devfactory.com/avatars/apush.png"
++ *   }
++ * </example>
++ */
++export type UserModel = {
++    name: string;
++    avatar: string;
++};
+diff --git a/src/models/QuestionProp.ts b/src/models/QuestionProp.ts
+new file mode 100644
+index 0000000..d6b891e
+--- /dev/null
++++ b/src/models/QuestionProp.ts
+@@ -0,0 +1,6 @@
++import { StyleProp, ViewStyle } from 'react-native';
++
++export type QuestionProps = {
++    text: string;
++    style: StyleProp<ViewStyle>;
++};
+diff --git a/src/models/TabBarItemProps.ts b/src/models/TabBarItemProps.ts
+new file mode 100644
+index 0000000..aad0d11
+--- /dev/null
++++ b/src/models/TabBarItemProps.ts
+@@ -0,0 +1,8 @@
++import React from 'react';
++
++export type TabBarItemProps = {
++    id: number;
++    selected: boolean;
++    title: string;
++    icon: React.ReactElement;
++};
+diff --git a/src/models/TestState.ts b/src/models/TestState.ts
+new file mode 100644
+index 0000000..60ce53a
+--- /dev/null
++++ b/src/models/TestState.ts
+@@ -0,0 +1,5 @@
++export enum TestStateEnum {
++  NoAnswerChosenByStudent,
++  AnswerChosenByStudentAndKeyReceivedFromServer,
++  Graded,
++}
+diff --git a/src/models/TestTaking.ts b/src/models/TestTaking.ts
+new file mode 100644
+index 0000000..9a3bb3c
+--- /dev/null
++++ b/src/models/TestTaking.ts
+@@ -0,0 +1,21 @@
++import { AnswerModel, QuestionModel } from './QuestionModels';
++import { TestStateEnum } from './TestState';
++
++export class TestTaking {
++    question: QuestionModel | undefined;
++    answer: AnswerModel | undefined;
++    optionSelected: string | undefined;
++    testState: TestStateEnum;
++
++    constructor(
++        question: QuestionModel | undefined = undefined,
++        answer: AnswerModel | undefined = undefined,
++        optionSelected: string | undefined = undefined,
++        testState = TestStateEnum.NoAnswerChosenByStudent,
++    ) {
++        this.question = question;
++        this.answer = answer;
++        this.optionSelected = optionSelected;
++        this.testState = testState;
++    }
++}
+diff --git a/src/templates/TabBarContent.tsx b/src/templates/TabBarContent.tsx
+new file mode 100644
+index 0000000..c3d6055
+--- /dev/null
++++ b/src/templates/TabBarContent.tsx
+@@ -0,0 +1,13 @@
++import React from 'react';
++
++import TabBar from '../components/organisms/TabBar';
++import HomePage from '../components/pages/HomePage';
++
++export default function TabBarContent() {
++    return (
++        <>
++            <HomePage />
++            <TabBar />
++        </>
++    );
++}
